@@ -1,6 +1,5 @@
-.burgerIngredientsContainer {
-    padding-top: 40px;
-    padding-bottom: 40px;
+.burgerIngredientsContainer nav {
+    display: flex;
 }
 
 .burgerIngredientsContainer ul {

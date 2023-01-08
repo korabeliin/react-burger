@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import styles from './burger-constructor.module.css';
 import {Button, ConstructorElement, CurrencyIcon, DragIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import fluorescentBun from '../../images/fluorescent-bun.png';
+import {ingredientType} from '../../utils/types';
 
 const BurgerConstructor = ({fakeData}) => {
 
     return (
-        <section className={styles.burgerConstructorContainer} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <section className={[styles.burgerConstructorContainer, 'pt-25 pb-2.5'].join(' ')}>
             <div className={styles.burgerContainer}>
                 <div className='pl-8 mr-4'>
                     <ConstructorElement
@@ -20,16 +21,16 @@ const BurgerConstructor = ({fakeData}) => {
                 </div>
 
                 <ul className='pl-8 custom-scroll'>
-                    {fakeData.map((el, id) =>
-                        <li key={el.id} className='mb-4'>
+                    {fakeData.map((el) =>
+                        <li key={el._id} className='mb-4'>
                             <div className={styles.bullets}>
                                 <DragIcon  type="primary" />
                             </div>
                             <div>
                                 <ConstructorElement
-                                    text={el.text}
+                                    text={el.name}
                                     price={el.price}
-                                    thumbnail={el.thumbnail}
+                                    thumbnail={el.image}
                                     extraClass='mr-2'
                                 />
                             </div>
@@ -59,15 +60,8 @@ const BurgerConstructor = ({fakeData}) => {
     );
 };
 
-const fakeDataPropTypes = PropTypes.shape({
-    text: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    thumbnail: PropTypes.string.isRequired,
-    id: PropTypes.number.isRequired,
-})
-
 BurgerConstructor.propTypes = {
-    fakeData: PropTypes.arrayOf(fakeDataPropTypes)
+    fakeData: PropTypes.arrayOf(ingredientType)
 }
 
 

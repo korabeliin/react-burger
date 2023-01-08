@@ -1,6 +1,7 @@
 .burgerConstructorContainer {
-    padding-top: 100px;
-    padding-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .burgerContainer {
