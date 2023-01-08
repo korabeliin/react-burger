@@ -1,0 +1,41 @@
+.burgerConstructorContainer {
+    padding-top: 100px;
+    padding-bottom: 10px;
+}
+
+.burgerContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    max-height: 380px;
+}
+
+.burgerContainer ul {
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.burgerContainer ul li {
+    position: relative;
+}
+
+.burgerContainer ul li div:last-child {
+    min-width: 536px;
+}
+
+.priceAndOrder {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.priceAndOrder span {
+    display: flex;
+    align-items: center;
+}
+
+.bullets {
+    position: absolute;
+    left: -35px;
+    top: calc(50% - 12px);
+}
