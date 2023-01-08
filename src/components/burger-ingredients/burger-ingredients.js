@@ -32,10 +32,7 @@ const BurgerIngredients = ({data}) => {
                             .map(el =>
                                 <BurgerIngredientsItem
                                     key={el._id}
-                                    name={el.name}
-                                    price={el.price}
-                                    imageSrc={el.image}
-                                    imageAlt={el.name}
+                                    ingredient={el}
                                 />
                             )
                         }
@@ -49,10 +46,7 @@ const BurgerIngredients = ({data}) => {
                             .map(el =>
                                 <BurgerIngredientsItem
                                     key={el._id}
-                                    name={el.name}
-                                    price={el.price}
-                                    imageSrc={el.image}
-                                    imageAlt={el.name}
+                                    ingredient={el}
                                 />
                             )
                         }
@@ -66,10 +60,7 @@ const BurgerIngredients = ({data}) => {
                             .map(el =>
                                 <BurgerIngredientsItem
                                     key={el._id}
-                                    name={el.name}
-                                    price={el.price}
-                                    imageSrc={el.image}
-                                    imageAlt={el.name}
+                                    ingredient={el}
                                 />
                             )
                         }
