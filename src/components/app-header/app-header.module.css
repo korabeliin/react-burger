@@ -1,0 +1,23 @@
+.appHeaderContainer {
+    display: flex;
+    padding: 16px;
+    width: 80%;
+}
+
+.appHeaderContainer .test {
+    margin-right: auto;
+}
+
+.appHeaderContainer a:last-child {
+    margin-left: auto;
+}
+
+.appHeaderContainer div {
+    display: flex;
+}
+
+.appHeaderContainer a {
+    display: flex;
+    align-items: center;
+}
+
