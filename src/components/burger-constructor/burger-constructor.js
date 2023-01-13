@@ -7,7 +7,7 @@ import {ingredientType} from '../../utils/types';
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 
-const BurgerConstructor = React.memo( ({ingredients, onModalClose, isModalOpen, onModalOpen}) => {
+const BurgerConstructor = React.memo( ({ingredients, handleModalClose, isButtonClicked, setIsButtonClicked}) => {
 
     return (
         <section className={[styles.burgerConstructorContainer, 'pt-25 pb-2.5'].join(' ')}>
@@ -23,7 +23,7 @@ const BurgerConstructor = React.memo( ({ingredients, onModalClose, isModalOpen, 
                 </div>
 
                 <ul className='pl-8 custom-scroll'>
-                    {ingredients.data.map((el) =>
+                    {ingredients.data.filter(el => el.type !== 'bun').map((el) =>
                         <li key={el._id} className='mb-4'>
                             <div className={styles.bullets}>
                                 <DragIcon  type="primary" />
@@ -54,11 +54,11 @@ const BurgerConstructor = React.memo( ({ingredients, onModalClose, isModalOpen, 
                <span className="text text_type_digits-medium">
                     610<div className='ml-2'><CurrencyIcon type="primary" /></div>
                </span>
-                <Button onClick={onModalOpen} htmlType="button" type="primary" size="large" extraClass="ml-10">
+                <Button onClick={() => setIsButtonClicked(true)} htmlType="button" type="primary" size="large" extraClass="ml-10">
                     Оформить заказ
                 </Button>
             </div>
-            <Modal onModalClose={onModalClose} isModalOpen={isModalOpen} >
+            <Modal onModalClose={handleModalClose} isButtonClicked={isButtonClicked} >
                 <OrderDetails />
             </Modal>
         </section>
@@ -69,9 +69,9 @@ BurgerConstructor.propTypes = {
     ingredients: PropTypes.shape({
         data: PropTypes.arrayOf(ingredientType.isRequired).isRequired
     }),
-    onModalClose: PropTypes.func,
-    onModalOpen: PropTypes.func,
-    isModalOpen: PropTypes.bool
+    handleModalClose: PropTypes.func.isRequired,
+    setIsButtonClicked: PropTypes.func.isRequired,
+    isButtonClicked: PropTypes.bool.isRequired
 }
 
 export default BurgerConstructor;

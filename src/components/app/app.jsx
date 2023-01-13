@@ -1,9 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import AppHeader from "../app-header/app-header";
 import styles from './app.module.css';
 import BurgerIngredients from "../../components/burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../../components/burger-constructor/burger-constructor";
-import withModal from "../hocs/with-modal";
 
 function App() {
 
@@ -12,12 +11,33 @@ function App() {
         data: []
     });
 
+    const [currentIngredient, setCurrentIngredient] = useState({});
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isButtonClicked, setIsButtonClicked] = useState(false);
+
+    const handleModalClose = useCallback( () => {
+        setIsModalOpen(false);
+        setIsButtonClicked(false)
+    }, [])
+
+    const handleModalOpen = useCallback(  (data) => {
+        setCurrentIngredient(data)
+        setIsModalOpen(true);
+    }, [])
+
     useEffect(() => {
         const getIngredientsData = async () => {
-            const res = await fetch(URL);
-            const resData = await res.json();
-            if(resData?.success) {
-                setIngredients({ data: resData.data});
+            try {
+                const res = await fetch(URL);
+                if(res.ok) {
+                    const resData = await res.json();
+                    if(resData?.success) {
+                        setIngredients({ data: resData.data});
+                    }
+                }
+            }  catch(err) {
+                alert(err);
             }
         }
 
@@ -26,16 +46,24 @@ function App() {
 
     }, [])
 
-    // console.log(ingredientsData)
-
-    const WithModalConstructor = withModal(BurgerConstructor)
+    // console.log(ingredients)
 
   return (
     <div className={styles.app}>
       <AppHeader />
       <main className={styles.burgerContainer}>
-          <BurgerIngredients ingredients={ingredients} />
-          <WithModalConstructor ingredients={ingredients} />
+          <BurgerIngredients
+              handleModalClose={handleModalClose}
+              isModalOpen={isModalOpen}
+              currentIngredient={currentIngredient}
+              handleModalOpen={handleModalOpen}
+              ingredients={ingredients} />
+          <BurgerConstructor
+              ingredients={ingredients}
+              handleModalClose={handleModalClose}
+              isButtonClicked={isButtonClicked}
+              setIsButtonClicked={setIsButtonClicked}
+          />
       </main>
     </div>
   );

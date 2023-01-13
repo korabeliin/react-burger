@@ -6,24 +6,26 @@ import styles from './modal.module.css';
 import {CloseIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import ModalOverlay from "../modal-overlay/modal-overlay";
 
-const Modal = React.memo( ({children, header, onModalClose, isModalOpen}) => {
+const Modal = React.memo( ({children, header, onModalClose, isModalOpen, isButtonClicked}) => {
 
     useEffect(() => {
         const keyDownHandler = e => {
             if(e.key === 'Escape') {
                 onModalClose()
             }
+            console.log(e.key)
         }
+
         document.addEventListener('keydown', keyDownHandler);
 
         return () => {
             document.removeEventListener('keydown', keyDownHandler);
         }
-    }, [])
+    }, [isModalOpen, isButtonClicked])
 
     return ReactDOM.createPortal(
         <>
-            <div className={`${styles.modal} p-10 ${isModalOpen ? styles.active : ''}`}>
+            <div className={`${styles.modal} p-10 ${isModalOpen ? styles.active : ''} ${isButtonClicked ? styles.active : ''}`}>
                 <header>
                     <button onClick={onModalClose}>
                         <CloseIcon type="primary" />
@@ -36,7 +38,7 @@ const Modal = React.memo( ({children, header, onModalClose, isModalOpen}) => {
                 </header>
                 {children}
             </div>
-            <ModalOverlay isModalOpen={isModalOpen} onClose={onModalClose} />
+            <ModalOverlay isButtonClicked={isButtonClicked} isModalOpen={isModalOpen} onClose={onModalClose} />
         </>,
         document.getElementById('modal')
 )});

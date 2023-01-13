@@ -1,18 +1,17 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import PropTypes from 'prop-types';
 import styles from './burger-ingredients.module.css';
 import {Tab} from "@ya.praktikum/react-developer-burger-ui-components";
 import BurgerIngredientsItem from "../burger-ingredients-item/burger-ingredients-item";
 import {ingredientType} from '../../utils/types';
-import withModal from "../hocs/with-modal";
+import IngredientDetails from "../ingredient-details/ingredient-details";
+import Modal from "../modal/modal";
 
-const BurgerIngredients = React.memo( ({ingredients}) => {
+const BurgerIngredients = React.memo( ({ingredients, handleModalOpen, handleModalClose, isModalOpen, currentIngredient}) => {
 
     const [current, setCurrent] = useState('one');
 
-    // console.log(ingredientsData)
-
-    const WithModalIngredientsItem = withModal(BurgerIngredientsItem)
+    // console.log(ingredients)
 
     return (
         <section className={[styles.burgerIngredientsContainer, 'pt-10 pb-10'].join(' ')}>
@@ -35,9 +34,10 @@ const BurgerIngredients = React.memo( ({ingredients}) => {
                         {ingredients.data
                             .filter(el => el.type === 'bun')
                             .map(el =>
-                                <WithModalIngredientsItem
+                                <BurgerIngredientsItem
                                     key={el._id}
                                     ingredient={el}
+                                    onModalOpen={handleModalOpen}
                                 />
                             )
                         }
@@ -49,9 +49,10 @@ const BurgerIngredients = React.memo( ({ingredients}) => {
                         {ingredients.data
                             .filter(el => el.type === 'sauce')
                             .map(el =>
-                                <WithModalIngredientsItem
+                                <BurgerIngredientsItem
                                     key={el._id}
                                     ingredient={el}
+                                    onModalOpen={handleModalOpen}
                                 />
                             )
                         }
@@ -63,15 +64,20 @@ const BurgerIngredients = React.memo( ({ingredients}) => {
                         {ingredients.data
                             .filter(el => el.type === 'main')
                             .map(el =>
-                                <WithModalIngredientsItem
+                                <BurgerIngredientsItem
                                     key={el._id}
                                     ingredient={el}
+                                    onModalOpen={handleModalOpen}
                                 />
                             )
                         }
                     </ul>
                 </div>
             </div>
+
+            <Modal isModalOpen={isModalOpen} onModalClose={handleModalClose} header='Детали ингредиента'>
+                <IngredientDetails currentIngredient={currentIngredient} />
+            </Modal>
         </section>
     );
 });
@@ -79,7 +85,12 @@ const BurgerIngredients = React.memo( ({ingredients}) => {
 BurgerIngredients.propTypes = {
     ingredients: PropTypes.shape({
         data: PropTypes.arrayOf(ingredientType.isRequired).isRequired
-    })
+    }),
+    handleModalOpen: PropTypes.func.isRequired,
+    handleModalClose: PropTypes.func.isRequired,
+    isModalOpen: PropTypes.bool.isRequired,
+    currentIngredient: ingredientType
+
 }
 
 export default BurgerIngredients;
