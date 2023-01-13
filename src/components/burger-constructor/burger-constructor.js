@@ -4,8 +4,10 @@ import styles from './burger-constructor.module.css';
 import {Button, ConstructorElement, CurrencyIcon, DragIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import fluorescentBun from '../../images/fluorescent-bun.png';
 import {ingredientType} from '../../utils/types';
+import Modal from "../modal/modal";
+import OrderDetails from "../order-details/order-details";
 
-const BurgerConstructor = ({fakeData}) => {
+const BurgerConstructor = React.memo( ({ingredients, onModalClose, isModalOpen, onModalOpen}) => {
 
     return (
         <section className={[styles.burgerConstructorContainer, 'pt-25 pb-2.5'].join(' ')}>
@@ -21,7 +23,7 @@ const BurgerConstructor = ({fakeData}) => {
                 </div>
 
                 <ul className='pl-8 custom-scroll'>
-                    {fakeData.map((el) =>
+                    {ingredients.data.map((el) =>
                         <li key={el._id} className='mb-4'>
                             <div className={styles.bullets}>
                                 <DragIcon  type="primary" />
@@ -52,17 +54,24 @@ const BurgerConstructor = ({fakeData}) => {
                <span className="text text_type_digits-medium">
                     610<div className='ml-2'><CurrencyIcon type="primary" /></div>
                </span>
-                <Button htmlType="button" type="primary" size="large" extraClass="ml-10">
+                <Button onClick={onModalOpen} htmlType="button" type="primary" size="large" extraClass="ml-10">
                     Оформить заказ
                 </Button>
             </div>
+            <Modal onModalClose={onModalClose} isModalOpen={isModalOpen} >
+                <OrderDetails />
+            </Modal>
         </section>
     );
-};
+});
 
 BurgerConstructor.propTypes = {
-    fakeData: PropTypes.arrayOf(ingredientType)
+    ingredients: PropTypes.shape({
+        data: PropTypes.arrayOf(ingredientType.isRequired).isRequired
+    }),
+    onModalClose: PropTypes.func,
+    onModalOpen: PropTypes.func,
+    isModalOpen: PropTypes.bool
 }
-
 
 export default BurgerConstructor;

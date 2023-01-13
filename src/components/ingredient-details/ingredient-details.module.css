@@ -1,0 +1,17 @@
+.ingredientDetails {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ingredientDetails .nutritionInfo {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.ingredientDetails .nutritionInfo p {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

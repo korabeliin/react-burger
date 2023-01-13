@@ -1,0 +1,10 @@
+.orderDetails {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.orderDetails img {
+    max-width: 120px;
+    max-height: 120px;
+}
