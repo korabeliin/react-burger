@@ -3,6 +3,9 @@ import AppHeader from "../app-header/app-header";
 import styles from './app.module.css';
 import BurgerIngredients from "../../components/burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../../components/burger-constructor/burger-constructor";
+import Modal from "../modal/modal";
+import IngredientDetails from "../ingredient-details/ingredient-details";
+import OrderDetails from "../order-details/order-details";
 
 function App() {
 
@@ -11,18 +14,19 @@ function App() {
         data: []
     });
 
-    const [currentIngredient, setCurrentIngredient] = useState({});
+    const [currentIngredient, setCurrentIngredient] = useState(null);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isButtonClicked, setIsButtonClicked] = useState(false);
 
     const handleModalClose = useCallback( () => {
         setIsModalOpen(false);
-        setIsButtonClicked(false)
+        setCurrentIngredient(null)
     }, [])
 
     const handleModalOpen = useCallback(  (data) => {
-        setCurrentIngredient(data)
+        if(data) {
+            setCurrentIngredient(data)
+        }
         setIsModalOpen(true);
     }, [])
 
@@ -46,24 +50,33 @@ function App() {
 
     }, [])
 
-    // console.log(ingredients)
+    // console.log(currentIngredient)
 
   return (
     <div className={styles.app}>
       <AppHeader />
       <main className={styles.burgerContainer}>
           <BurgerIngredients
-              handleModalClose={handleModalClose}
-              isModalOpen={isModalOpen}
-              currentIngredient={currentIngredient}
               handleModalOpen={handleModalOpen}
               ingredients={ingredients} />
           <BurgerConstructor
               ingredients={ingredients}
-              handleModalClose={handleModalClose}
-              isButtonClicked={isButtonClicked}
-              setIsButtonClicked={setIsButtonClicked}
+              handleModalOpen={handleModalOpen}
           />
+
+          {currentIngredient ?
+              <Modal isModalOpen={isModalOpen} onModalClose={handleModalClose} header='Детали ингредиента'>
+                  <IngredientDetails currentIngredient={currentIngredient} />
+              </Modal>
+              :
+              isModalOpen ?
+                  <Modal onModalClose={handleModalClose} isModalOpen={isModalOpen}>
+                      <OrderDetails />
+                  </Modal>
+                  :
+                  null
+          }
+
       </main>
     </div>
   );

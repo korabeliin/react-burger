@@ -1,17 +1,13 @@
-import React, {useCallback, useState} from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import styles from './burger-ingredients.module.css';
 import {Tab} from "@ya.praktikum/react-developer-burger-ui-components";
 import BurgerIngredientsItem from "../burger-ingredients-item/burger-ingredients-item";
 import {ingredientType} from '../../utils/types';
-import IngredientDetails from "../ingredient-details/ingredient-details";
-import Modal from "../modal/modal";
 
-const BurgerIngredients = React.memo( ({ingredients, handleModalOpen, handleModalClose, isModalOpen, currentIngredient}) => {
+const BurgerIngredients = React.memo( ({ingredients, handleModalOpen}) => {
 
     const [current, setCurrent] = useState('one');
-
-    // console.log(ingredients)
 
     return (
         <section className={[styles.burgerIngredientsContainer, 'pt-10 pb-10'].join(' ')}>
@@ -74,10 +70,6 @@ const BurgerIngredients = React.memo( ({ingredients, handleModalOpen, handleModa
                     </ul>
                 </div>
             </div>
-
-            <Modal isModalOpen={isModalOpen} onModalClose={handleModalClose} header='Детали ингредиента'>
-                <IngredientDetails currentIngredient={currentIngredient} />
-            </Modal>
         </section>
     );
 });
@@ -86,11 +78,7 @@ BurgerIngredients.propTypes = {
     ingredients: PropTypes.shape({
         data: PropTypes.arrayOf(ingredientType.isRequired).isRequired
     }),
-    handleModalOpen: PropTypes.func.isRequired,
-    handleModalClose: PropTypes.func.isRequired,
-    isModalOpen: PropTypes.bool.isRequired,
-    currentIngredient: ingredientType
-
+    handleModalOpen: PropTypes.func.isRequired
 }
 
 export default BurgerIngredients;

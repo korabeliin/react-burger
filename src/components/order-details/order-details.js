@@ -3,6 +3,7 @@ import styles from './order-details.module.css';
 import doneImg from '../../images/done.svg';
 
 const OrderDetails = React.memo( () => {
+
     return (
         <div className={`${styles.orderDetails} pb-10 pl-20 pr-20`}>
             <h1 className="text text_type_digits-large mb-8">034536</h1>

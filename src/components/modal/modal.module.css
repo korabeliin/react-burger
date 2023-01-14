@@ -13,7 +13,7 @@
     border-radius: 40px;
     opacity: 0;
     pointer-events: none;
-    transition: .25s;
+    /*transition: .25s;*/
 }
 
 .modal.active {
