@@ -32,16 +32,12 @@ function App() {
 
     useEffect(() => {
         const getIngredientsData = async () => {
-            try {
-                const res = await fetch(URL);
-                if(res.ok) {
-                    const resData = await res.json();
-                    if(resData?.success) {
-                        setIngredients({ data: resData.data});
-                    }
+            const res = await fetch(URL);
+            if(res.ok) {
+                const resData = await res.json();
+                if(resData?.success) {
+                    setIngredients({ data: resData.data});
                 }
-            }  catch(err) {
-                alert(err);
             }
         }
 

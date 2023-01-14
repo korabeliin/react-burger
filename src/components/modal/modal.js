@@ -15,6 +15,8 @@ const Modal = React.memo( ({children, header, onModalClose, isModalOpen}) => {
     }, [])
 
     useEffect(() => {
+        if (!isModalOpen) return;
+
         document.addEventListener('keydown', keyDownHandler);
 
         return () => {
