@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types'
 
@@ -8,13 +8,13 @@ import ModalOverlay from "../modal-overlay/modal-overlay";
 
 const Modal = React.memo( ({children, header, onModalClose, isModalOpen}) => {
 
-    const keyDownHandler = useCallback(e => {
-        if(e.key === 'Escape') {
-            onModalClose()
-        }
-    }, [])
-
     useEffect(() => {
+        const keyDownHandler = e => {
+            if(e.key === 'Escape') {
+                onModalClose()
+            }
+        }
+
         if (!isModalOpen) return;
 
         document.addEventListener('keydown', keyDownHandler);
