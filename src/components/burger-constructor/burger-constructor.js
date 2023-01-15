@@ -5,7 +5,7 @@ import {Button, ConstructorElement, CurrencyIcon, DragIcon} from "@ya.praktikum/
 import fluorescentBun from '../../images/fluorescent-bun.png';
 import {ingredientType} from '../../utils/types';
 
-const BurgerConstructor = ({fakeData}) => {
+const BurgerConstructor = React.memo( ({ingredients, handleModalOpen}) => {
 
     return (
         <section className={[styles.burgerConstructorContainer, 'pt-25 pb-2.5'].join(' ')}>
@@ -21,7 +21,7 @@ const BurgerConstructor = ({fakeData}) => {
                 </div>
 
                 <ul className='pl-8 custom-scroll'>
-                    {fakeData.map((el) =>
+                    {ingredients.data.filter(el => el.type !== 'bun').map((el) =>
                         <li key={el._id} className='mb-4'>
                             <div className={styles.bullets}>
                                 <DragIcon  type="primary" />
@@ -52,17 +52,19 @@ const BurgerConstructor = ({fakeData}) => {
                <span className="text text_type_digits-medium">
                     610<div className='ml-2'><CurrencyIcon type="primary" /></div>
                </span>
-                <Button htmlType="button" type="primary" size="large" extraClass="ml-10">
+                <Button onClick={() => handleModalOpen(null)} htmlType="button" type="primary" size="large" extraClass="ml-10">
                     Оформить заказ
                 </Button>
             </div>
         </section>
     );
-};
+});
 
 BurgerConstructor.propTypes = {
-    fakeData: PropTypes.arrayOf(ingredientType)
+    ingredients: PropTypes.shape({
+        data: PropTypes.arrayOf(ingredientType.isRequired).isRequired
+    }),
+    handleModalOpen: PropTypes.func.isRequired
 }
-
 
 export default BurgerConstructor;

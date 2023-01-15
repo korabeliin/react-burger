@@ -40,3 +40,7 @@
     left: -35px;
     top: calc(50% - 12px);
 }
+
+.burgerConstructorContainer header {
+    justify-content: flex-end;
+}

@@ -5,7 +5,7 @@ import {Tab} from "@ya.praktikum/react-developer-burger-ui-components";
 import BurgerIngredientsItem from "../burger-ingredients-item/burger-ingredients-item";
 import {ingredientType} from '../../utils/types';
 
-const BurgerIngredients = ({data}) => {
+const BurgerIngredients = React.memo( ({ingredients, handleModalOpen}) => {
 
     const [current, setCurrent] = useState('one');
 
@@ -27,12 +27,13 @@ const BurgerIngredients = ({data}) => {
                 <div className='buns'>
                     <h3 className="mt-10 text text_type_main-medium">Булки</h3>
                     <ul className='pl-4 pr-4 pt-4'>
-                        {data
+                        {ingredients.data
                             .filter(el => el.type === 'bun')
                             .map(el =>
                                 <BurgerIngredientsItem
                                     key={el._id}
                                     ingredient={el}
+                                    onModalOpen={handleModalOpen}
                                 />
                             )
                         }
@@ -41,12 +42,13 @@ const BurgerIngredients = ({data}) => {
                 <div className='sauces'>
                     <h3 className="mt-10 text text_type_main-medium">Соусы</h3>
                     <ul className='pl-4 pr-4 pt-4'>
-                        {data
+                        {ingredients.data
                             .filter(el => el.type === 'sauce')
                             .map(el =>
                                 <BurgerIngredientsItem
                                     key={el._id}
                                     ingredient={el}
+                                    onModalOpen={handleModalOpen}
                                 />
                             )
                         }
@@ -55,12 +57,13 @@ const BurgerIngredients = ({data}) => {
                 <div className='fillings'>
                     <h3 className="mt-10 text text_type_main-medium">Начинки</h3>
                     <ul className='pl-4 pr-4 pt-4'>
-                        {data
+                        {ingredients.data
                             .filter(el => el.type === 'main')
                             .map(el =>
                                 <BurgerIngredientsItem
                                     key={el._id}
                                     ingredient={el}
+                                    onModalOpen={handleModalOpen}
                                 />
                             )
                         }
@@ -69,10 +72,13 @@ const BurgerIngredients = ({data}) => {
             </div>
         </section>
     );
-};
+});
 
 BurgerIngredients.propTypes = {
-    data: PropTypes.arrayOf(ingredientType).isRequired
+    ingredients: PropTypes.shape({
+        data: PropTypes.arrayOf(ingredientType.isRequired).isRequired
+    }),
+    handleModalOpen: PropTypes.func.isRequired
 }
 
 export default BurgerIngredients;
