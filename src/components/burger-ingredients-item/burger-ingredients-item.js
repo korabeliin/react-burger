@@ -1,18 +1,21 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import styles from './burger-ingredients-item.module.css';
 import {Counter, CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import {ingredientType} from "../../utils/types";
-import PropTypes from "prop-types";
 import { useDrag } from "react-dnd";
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { CURRENT_INGREDIENT } from '../../redux/slices/currentIngredientSlice';
 
-const BurgerIngredientsItem = React.memo(({ingredient, onModalOpen}) => {
+const BurgerIngredientsItem = ({ingredient}) => {
 
-    const stuffing = useSelector(store => store.ingredients.constructorIngredients.stuffing);
-    const bun = useSelector(store => store.ingredients.constructorIngredients.bun);
-    const counter = stuffing.filter(el => el.ingredient._id === ingredient._id).length;
-   
-    // console.log(counter)
+    const dispatch = useDispatch();
+    const stuffing = useSelector(store => store.constructorIngredients.constructorIngredients.stuffing);
+    const bun = useSelector(store => store.constructorIngredients.constructorIngredients.bun);
+
+    const counter = useMemo(() => {
+        return stuffing.filter(el => el.ingredient._id === ingredient._id).length;
+    }, [stuffing])
 
     const [, stuffingRef] = useDrag({
         type: "stuffing",
@@ -29,11 +32,11 @@ const BurgerIngredientsItem = React.memo(({ingredient, onModalOpen}) => {
             <li 
                 ref={ingredient.type === 'bun' ? bunRef : stuffingRef} 
                 className='pl-4 pr-4 mb-10' 
-                onClick={() => onModalOpen(ingredient)}
+                onClick={() => dispatch(CURRENT_INGREDIENT(ingredient))}
             >
                 {
                     ingredient.type === 'bun' ?
-                    <div className={bun.bunInfo?._id === ingredient._id ? styles.showCounter : styles.hideCounter}>
+                    <div className={bun?.bunInfo._id === ingredient._id ? styles.showCounter : styles.hideCounter}>
                         <Counter count={2} size="default" extraClass="m-1" />
                     </div>
                     :
@@ -51,11 +54,10 @@ const BurgerIngredientsItem = React.memo(({ingredient, onModalOpen}) => {
             </li>
         </>
     );
-});
+};
 
 BurgerIngredientsItem.propTypes = {
-    ingredient: ingredientType.isRequired,
-    onModalOpen: PropTypes.func.isRequired,
+    ingredient: ingredientType.isRequired
 }
 
 export default BurgerIngredientsItem;

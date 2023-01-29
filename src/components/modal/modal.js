@@ -6,7 +6,9 @@ import styles from './modal.module.css';
 import {CloseIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import ModalOverlay from "../modal-overlay/modal-overlay";
 
-const Modal = React.memo( ({children, header, onModalClose, isModalOpen}) => {
+const modalRoot = document.getElementById('modal');
+
+const Modal = ({children, header, onModalClose}) => {
 
     useEffect(() => {
         const keyDownHandler = e => {
@@ -15,18 +17,16 @@ const Modal = React.memo( ({children, header, onModalClose, isModalOpen}) => {
             }
         }
 
-        if (!isModalOpen) return;
-
         document.addEventListener('keydown', keyDownHandler);
 
         return () => {
             document.removeEventListener('keydown', keyDownHandler);
         }
-    }, [isModalOpen])
+    }, [onModalClose])
 
     return ReactDOM.createPortal(
         <>
-            <div className={`${styles.modal} p-10 ${isModalOpen ? styles.active : ''}`}>
+            <div className={`${styles.modal} p-10`}>
                 <header>
                     <button onClick={onModalClose}>
                         <CloseIcon type="primary" />
@@ -39,16 +39,15 @@ const Modal = React.memo( ({children, header, onModalClose, isModalOpen}) => {
                 </header>
                 {children}
             </div>
-            <ModalOverlay isModalOpen={isModalOpen} onClose={onModalClose} />
-        </>,
-        document.getElementById('modal')
-)});
+            <ModalOverlay onClose={onModalClose} />
+        </>, 
+        modalRoot
+)};
 
 Modal.propTypes = {
     children: PropTypes.node.isRequired,
     header: PropTypes.string,
-    onModalClose: PropTypes.func,
-    isModalOpen: PropTypes.bool
+    onModalClose: PropTypes.func.isRequired
 }
 
 export default Modal;

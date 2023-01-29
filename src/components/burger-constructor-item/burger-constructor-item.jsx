@@ -5,11 +5,11 @@ import { ConstructorElement, DragIcon } from "@ya.praktikum/react-developer-burg
 import { useSelector, useDispatch } from 'react-redux';
 import { useDrop, useDrag } from "react-dnd";
 
-import { SORT_STUFFING, DELETE_STUFF_FROM_CONSTRUCTOR } from '../../redux/slices/ingredientsSlice';
+import { SORT_STUFFING, DELETE_STUFF_FROM_CONSTRUCTOR } from '../../redux/slices/constructorIngredientsSlice';
 
-const BurgerConstructorItem = React.memo(({text, thumbnail, price, id, index}) => {
+const BurgerConstructorItem = ({text, thumbnail, price, id, index}) => {
 
-  const stuffing = useSelector(store => store.ingredients.constructorIngredients.stuffing);
+  const stuffing = useSelector(store => store.constructorIngredients.constructorIngredients.stuffing);
 
   const dispatch = useDispatch();
 
@@ -97,7 +97,7 @@ const BurgerConstructorItem = React.memo(({text, thumbnail, price, id, index}) =
       </div>
   </li>
   );
-});
+};
 
 BurgerConstructorItem.propTypes = {
     text: PropTypes.string.isRequired,

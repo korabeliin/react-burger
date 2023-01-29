@@ -2,9 +2,9 @@ import React from 'react';
 import styles from "./ingredient-details.module.css";
 import { useSelector } from 'react-redux';
 
-const IngredientDetails = React.memo(() => {
+const IngredientDetails = () => {
     
-    const currentIngredient = useSelector(store => store.ingredients.currentIngredient);
+    const currentIngredient = useSelector(store => store.currentIngredient.currentIngredient);
 
     return (
         <>
@@ -37,6 +37,6 @@ const IngredientDetails = React.memo(() => {
         </>
 
     );
-});
+};
 
 export default IngredientDetails;

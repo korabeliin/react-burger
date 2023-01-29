@@ -4,23 +4,24 @@ import BurgerConstructorItem from '../burger-constructor-item/burger-constructor
 import styles from './burger-constructor.module.css';
 import {Button, ConstructorElement, CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import { useSelector, useDispatch } from 'react-redux';
-import { NEW_ORDER } from '../../redux/slices/ingredientsSlice';
+import { ORDER_MODAL_STATE } from '../../redux/slices/orderSlice';
+import OrderDetails from "../order-details/order-details";
+import Modal from "../modal/modal";
 import { useDrop} from "react-dnd";
 import { v4 as uuidv4 } from 'uuid';
 import { 
     ADD_STUFFING_TO_CONSTRUCTOR,
     ADD_BUN_TO_CONSTRUCTOR
-} from '../../redux/slices/ingredientsSlice';
+} from '../../redux/slices/constructorIngredientsSlice';
 
-const BurgerConstructor = React.memo( ({handleModalOpen}) => {
+const BurgerConstructor = ({handleModalClose}) => {
 
     const ingredients = useSelector(store => store.ingredients.ingredients);
-    const stuffing = useSelector(store => store.ingredients.constructorIngredients.stuffing);
-    const bun = useSelector(store => store.ingredients.constructorIngredients.bun);
+    const stuffing = useSelector(store => store.constructorIngredients.constructorIngredients.stuffing);
+    const bun = useSelector(store => store.constructorIngredients.constructorIngredients.bun);
+    const order = useSelector(store => store.order.order);
 
     const dispatch = useDispatch();
-
-    console.log(stuffing)
 
     const handleStuffDrop = (itemId) => {
         
@@ -48,7 +49,7 @@ const BurgerConstructor = React.memo( ({handleModalOpen}) => {
             total += stuffing[i].ingredient.price
         }
 
-        return bun.chosen ? total += bun.bunInfo.price * 2 : total;
+        return bun?.chosen ? total += bun.bunInfo.price * 2 : total;
 
     }, [stuffing, bun]);
 
@@ -58,7 +59,6 @@ const BurgerConstructor = React.memo( ({handleModalOpen}) => {
             handleStuffDrop(itemId);
         },
         collect: monitor => {
-            // console.log('monitor', monitor)
             return {isHover: monitor.isOver()}
         }
     });
@@ -69,17 +69,13 @@ const BurgerConstructor = React.memo( ({handleModalOpen}) => {
             handleBunDrop(itemId);
         },
         collect: monitor => {
-            // console.log('monitor', monitor)
             return {isBunHover: monitor.isOver()}
         }
     });
 
-    // console.log(isBunHover)
-
     const handleOrderButtonClick = () => {
         if(stuffing.length) {
-            handleModalOpen(null)
-            dispatch(NEW_ORDER())
+            dispatch(ORDER_MODAL_STATE(true))
         }
     }
 
@@ -87,7 +83,7 @@ const BurgerConstructor = React.memo( ({handleModalOpen}) => {
         <section className={`${styles.burgerConstructorContainer} pt-25 pb-2.5 pl-8`}>
             <div className={styles.burgerContainer}>
                 <div ref={constructorBunDropTarget} className={`${styles.constructorBunsContainer}`}>
-                    { bun.chosen ?
+                    { bun?.chosen ?
                         <ConstructorElement
                             type="top"
                             isLocked={true}
@@ -123,7 +119,7 @@ const BurgerConstructor = React.memo( ({handleModalOpen}) => {
                 </ul>
 
                 <div className={`${styles.constructorBunsContainer}`}>
-                    { bun.chosen ?
+                    { bun?.chosen ?
                         <ConstructorElement
                             type="bottom"
                             isLocked={true}
@@ -146,12 +142,17 @@ const BurgerConstructor = React.memo( ({handleModalOpen}) => {
                     Оформить заказ
                 </Button>
             </div>
+            {order.isOrderModalOpen && 
+                <Modal onModalClose={handleModalClose}>
+                    <OrderDetails />
+                </Modal>
+            }
         </section>
     );
-});
+};
 
 BurgerConstructor.propTypes = {
-    handleModalOpen: PropTypes.func.isRequired
+    handleModalClose: PropTypes.func.isRequired
 }
 
 export default BurgerConstructor;

@@ -11,14 +11,6 @@
                 0 4px 8px rgba(0, 0, 0, 0.04),
                 0 0 1px rgba(0, 0, 0, 0.04);
     border-radius: 40px;
-    opacity: 0;
-    pointer-events: none;
-    /*transition: .25s;*/
-}
-
-.modal.active {
-    opacity: 1;
-    pointer-events: all;
 }
 
 .modal header {
