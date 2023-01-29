@@ -1,0 +1,14 @@
+.burgerConstructorItem {
+  position: relative;
+  width: 85%;
+}
+
+.burgerConstructorItem div:last-child {
+  width: 100%;
+}
+
+.bullets {
+  position: absolute;
+  left: -60px;
+  top: calc(50% - 12px);
+}

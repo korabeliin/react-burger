@@ -1,33 +1,51 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import styles from './burger-ingredients.module.css';
 import {Tab} from "@ya.praktikum/react-developer-burger-ui-components";
 import BurgerIngredientsItem from "../burger-ingredients-item/burger-ingredients-item";
-import {ingredientType} from '../../utils/types';
+import { useSelector } from 'react-redux';
 
-const BurgerIngredients = React.memo( ({ingredients, handleModalOpen}) => {
+const BurgerIngredients = React.memo( ({handleModalOpen}) => {
 
-    const [current, setCurrent] = useState('one');
+    const [current, setCurrent] = useState('buns');
+
+    const ingredients = useSelector(store => store.ingredients.ingredients);
+
+    // const onTabClick = (tab) => {
+    //     setCurrent(tab);
+    //     const element = document.getElementById(tab);
+    //     if(element) element.scrollIntoView({behavior: 'smooth'});
+    // }
+
+    const ingredientsRef = useRef(null)
+
+    const handleScroll = () => {
+        const scrollTop = ingredientsRef.current.scrollTop
+
+        if(scrollTop < 100) setCurrent('buns')
+        if(scrollTop > 300 && scrollTop < 800) setCurrent('sauces')
+        if(scrollTop > 800) setCurrent('fillings')
+    }
 
     return (
-        <section className={[styles.burgerIngredientsContainer, 'pt-10 pb-10'].join(' ')}>
+        <section className={`${styles.burgerIngredientsContainer} pt-10 pb-10 `}>
             <h1 className="mb-5 text text_type_main-large">Соберите бургер</h1>
             <nav>
-                <Tab value="one" active={current === 'one'} onClick={setCurrent}>
+                <Tab value="buns" active={current === 'buns'} onClick={setCurrent}>
                     Булки
                 </Tab>
-                <Tab value="two" active={current === 'two'} onClick={setCurrent}>
+                <Tab value="sauces" active={current === 'sauces'} onClick={setCurrent}>
                     Соусы
                 </Tab>
-                <Tab value="three" active={current === 'three'} onClick={setCurrent}>
+                <Tab value="fillings" active={current === 'fillings'} onClick={setCurrent}>
                     Начинки
                 </Tab>
             </nav>
-            <div className={[styles.ingredients, 'custom-scroll'].join(' ')}>
-                <div className='buns'>
+            <div ref={ingredientsRef} onScroll={handleScroll} className={`${styles.ingredients} custom-scroll`}>
+                <div className='buns' id='buns'>
                     <h3 className="mt-10 text text_type_main-medium">Булки</h3>
                     <ul className='pl-4 pr-4 pt-4'>
-                        {ingredients.data
+                        {ingredients
                             .filter(el => el.type === 'bun')
                             .map(el =>
                                 <BurgerIngredientsItem
@@ -39,10 +57,10 @@ const BurgerIngredients = React.memo( ({ingredients, handleModalOpen}) => {
                         }
                     </ul>
                 </div>
-                <div className='sauces'>
+                <div className='sauces' id='sauces'>
                     <h3 className="mt-10 text text_type_main-medium">Соусы</h3>
                     <ul className='pl-4 pr-4 pt-4'>
-                        {ingredients.data
+                        {ingredients
                             .filter(el => el.type === 'sauce')
                             .map(el =>
                                 <BurgerIngredientsItem
@@ -54,10 +72,10 @@ const BurgerIngredients = React.memo( ({ingredients, handleModalOpen}) => {
                         }
                     </ul>
                 </div>
-                <div className='fillings'>
+                <div className='fillings' id='fillings'>
                     <h3 className="mt-10 text text_type_main-medium">Начинки</h3>
                     <ul className='pl-4 pr-4 pt-4'>
-                        {ingredients.data
+                        {ingredients
                             .filter(el => el.type === 'main')
                             .map(el =>
                                 <BurgerIngredientsItem
@@ -75,9 +93,6 @@ const BurgerIngredients = React.memo( ({ingredients, handleModalOpen}) => {
 });
 
 BurgerIngredients.propTypes = {
-    ingredients: PropTypes.shape({
-        data: PropTypes.arrayOf(ingredientType.isRequired).isRequired
-    }),
     handleModalOpen: PropTypes.func.isRequired
 }
 

@@ -6,73 +6,59 @@ import BurgerConstructor from "../../components/burger-constructor/burger-constr
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import OrderDetails from "../order-details/order-details";
+import { fetchIngredientsData } from "../../redux/slices/ingredientsSlice";
+import { useSelector, useDispatch } from 'react-redux';
+import { CURRENT_INGREDIENT } from '../../redux/slices/ingredientsSlice';
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 function App() {
+    const currentIngredient = useSelector(store => store.ingredients.currentIngredient);
 
-    const URL = 'https://norma.nomoreparties.space/api/ingredients';
-    const [ingredients, setIngredients] = useState({
-        data: []
-    });
+    // console.log(currentIngredient)
 
-    const [currentIngredient, setCurrentIngredient] = useState(null);
+    const dispatch = useDispatch();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleModalClose = useCallback( () => {
         setIsModalOpen(false);
-        setCurrentIngredient(null)
+        dispatch(CURRENT_INGREDIENT({}))
     }, [])
 
-    const handleModalOpen = useCallback(  (data) => {
+    const handleModalOpen = useCallback( (data) => {
         if(data) {
-            setCurrentIngredient(data)
+            dispatch(CURRENT_INGREDIENT(data))
         }
         setIsModalOpen(true);
     }, [])
 
     useEffect(() => {
-        const getIngredientsData = async () => {
-            const res = await fetch(URL);
-            if(res.ok) {
-                const resData = await res.json();
-                if(resData?.success) {
-                    setIngredients({ data: resData.data});
-                }
-            }
-        }
-
-        getIngredientsData()
-            .catch(() => alert("Во время загрузки ингредиентов произошла ошибка."))
-
-    }, [])
-
-    // console.log(currentIngredient)
+        dispatch(fetchIngredientsData())
+    }, [dispatch])
 
   return (
     <div className={styles.app}>
-      <AppHeader />
-      <main className={styles.burgerContainer}>
-          <BurgerIngredients
-              handleModalOpen={handleModalOpen}
-              ingredients={ingredients} />
-          <BurgerConstructor
-              ingredients={ingredients}
-              handleModalOpen={handleModalOpen}
-          />
+        <AppHeader />
+        <main className={styles.burgerContainer}>
 
-          {currentIngredient ?
-              <Modal isModalOpen={isModalOpen} onModalClose={handleModalClose} header='Детали ингредиента'>
-                  <IngredientDetails currentIngredient={currentIngredient} />
-              </Modal>
-              :
-              isModalOpen ?
-                  <Modal onModalClose={handleModalClose} isModalOpen={isModalOpen}>
-                      <OrderDetails />
-                  </Modal>
-                  :
-                  null
-          }
-
+        <DndProvider backend={HTML5Backend}>
+            <BurgerIngredients handleModalOpen={handleModalOpen} />
+            <BurgerConstructor handleModalOpen={handleModalOpen}/>
+        </DndProvider>
+        
+        {Object.keys(currentIngredient).length ?
+            <Modal isModalOpen={isModalOpen} onModalClose={handleModalClose} header='Детали ингредиента'>
+                <IngredientDetails currentIngredient={currentIngredient} />
+            </Modal>
+            :
+            isModalOpen ?
+                <Modal onModalClose={handleModalClose} isModalOpen={isModalOpen}>
+                    <OrderDetails />
+                </Modal>
+                :
+                null
+        }
       </main>
     </div>
   );
