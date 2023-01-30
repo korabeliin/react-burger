@@ -1,4 +1,4 @@
-import React, {useRef, useState, useMemo} from 'react';
+import React, {useRef, useState, useMemo, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import styles from './burger-ingredients.module.css';
 import {Tab} from "@ya.praktikum/react-developer-burger-ui-components";
@@ -6,6 +6,7 @@ import BurgerIngredientsItem from "../burger-ingredients-item/burger-ingredients
 import { useSelector } from 'react-redux';
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import Modal from "../modal/modal";
+import { useInView } from 'react-intersection-observer';
 
 const BurgerIngredients = ({handleModalClose}) => {
 
@@ -20,7 +21,6 @@ const BurgerIngredients = ({handleModalClose}) => {
         if(element) element.scrollIntoView({behavior: "smooth", block: "nearest"});
     }
 
-    const ingredientsRef = useRef(null);
 
     const buns = useMemo(() => {
         return ingredients.filter(el => el.type === 'bun')
@@ -34,31 +34,36 @@ const BurgerIngredients = ({handleModalClose}) => {
         return ingredients.filter(el => el.type === 'main')
     }, [ingredients])
 
-    const handleScroll = () => {
-        const scrollTop = ingredientsRef.current.scrollTop
 
-        if(scrollTop < 100) setCurrent('buns')
-        if(scrollTop > 300 && scrollTop < 800) setCurrent('sauces')
-        if(scrollTop > 800) setCurrent('fillings')
-    }
+    const {ref: bunsRef, inView: bunsInView } = useInView({
+        threshold: .5
+    })
 
+    const {ref: saucesRef, inView: saucesInView } = useInView({
+        threshold: .5
+    })
+
+    const {ref: fillingsRef, inView: fillingsInView } = useInView({
+        threshold: .2
+    })
+    
     return (
         <section className={`${styles.burgerIngredientsContainer} pt-10 pb-10 `}>
             <h1 className="mb-5 text text_type_main-large">Соберите бургер</h1>
             <nav>
-                <Tab value="buns" active={current === 'buns'} onClick={() => onTabClick('buns')}>
+                <Tab value="buns" active={bunsInView} onClick={() => onTabClick('buns')}>
                     Булки
                 </Tab>
-                <Tab value="sauces" active={current === 'sauces'} onClick={() => onTabClick('sauces')}>
+                <Tab value="sauces" active={saucesInView} onClick={() => onTabClick('sauces')}>
                     Соусы
                 </Tab>
-                <Tab value="fillings" active={current === 'fillings'} onClick={() => onTabClick('fillings')}>
+                <Tab value="fillings" active={fillingsInView} onClick={() => onTabClick('fillings')}>
                     Начинки
                 </Tab>
                 
             </nav>
-            <div ref={ingredientsRef} onScroll={handleScroll} className={`${styles.ingredients} custom-scroll`}>
-                <div className='buns' id='buns'>
+            <div className={`${styles.ingredients} custom-scroll`}>
+                <div ref={bunsRef} id='buns'>
                     <h3 className="mt-10 text text_type_main-medium">Булки</h3>
                     <ul className='pl-4 pr-4 pt-4'>
                         {buns.map(el =>
@@ -70,7 +75,7 @@ const BurgerIngredients = ({handleModalClose}) => {
                         }
                     </ul>
                 </div>
-                <div className='sauces' id='sauces'>
+                <div ref={saucesRef} id='sauces'>
                     <h3 className="mt-10 text text_type_main-medium">Соусы</h3>
                     <ul className='pl-4 pr-4 pt-4'>
                         {sauces.map(el =>
@@ -82,7 +87,7 @@ const BurgerIngredients = ({handleModalClose}) => {
                         }
                     </ul>
                 </div>
-                <div className='fillings' id='fillings'>
+                <div ref={fillingsRef} id='fillings'>
                     <h3 className="mt-10 text text_type_main-medium">Начинки</h3>
                     <ul className='pl-4 pr-4 pt-4'>
                         {fillings.map(el =>
