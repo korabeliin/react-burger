@@ -1,78 +1,36 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import AppHeader from "../app-header/app-header";
 import styles from './app.module.css';
 import BurgerIngredients from "../../components/burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../../components/burger-constructor/burger-constructor";
-import Modal from "../modal/modal";
-import IngredientDetails from "../ingredient-details/ingredient-details";
-import OrderDetails from "../order-details/order-details";
+import { fetchIngredientsData } from "../../redux/slices/ingredientsSlice";
+import { useDispatch } from 'react-redux';
+import { CURRENT_INGREDIENT } from '../../redux/slices/currentIngredientSlice';
+import { ORDER_MODAL_STATE } from '../../redux/slices/orderSlice';
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 function App() {
+    const dispatch = useDispatch();
 
-    const URL = 'https://norma.nomoreparties.space/api/ingredients';
-    const [ingredients, setIngredients] = useState({
-        data: []
-    });
-
-    const [currentIngredient, setCurrentIngredient] = useState(null);
-
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const handleModalClose = useCallback( () => {
-        setIsModalOpen(false);
-        setCurrentIngredient(null)
-    }, [])
-
-    const handleModalOpen = useCallback(  (data) => {
-        if(data) {
-            setCurrentIngredient(data)
-        }
-        setIsModalOpen(true);
-    }, [])
+    const handleModalClose = () => {
+        dispatch(CURRENT_INGREDIENT(null))
+        dispatch(ORDER_MODAL_STATE(false))
+    }
 
     useEffect(() => {
-        const getIngredientsData = async () => {
-            const res = await fetch(URL);
-            if(res.ok) {
-                const resData = await res.json();
-                if(resData?.success) {
-                    setIngredients({ data: resData.data});
-                }
-            }
-        }
-
-        getIngredientsData()
-            .catch(() => alert("Во время загрузки ингредиентов произошла ошибка."))
-
-    }, [])
-
-    // console.log(currentIngredient)
+        dispatch(fetchIngredientsData())
+    }, [dispatch])
 
   return (
     <div className={styles.app}>
-      <AppHeader />
-      <main className={styles.burgerContainer}>
-          <BurgerIngredients
-              handleModalOpen={handleModalOpen}
-              ingredients={ingredients} />
-          <BurgerConstructor
-              ingredients={ingredients}
-              handleModalOpen={handleModalOpen}
-          />
+        <AppHeader />
+        <main className={styles.burgerContainer}>
 
-          {currentIngredient ?
-              <Modal isModalOpen={isModalOpen} onModalClose={handleModalClose} header='Детали ингредиента'>
-                  <IngredientDetails currentIngredient={currentIngredient} />
-              </Modal>
-              :
-              isModalOpen ?
-                  <Modal onModalClose={handleModalClose} isModalOpen={isModalOpen}>
-                      <OrderDetails />
-                  </Modal>
-                  :
-                  null
-          }
-
+        <DndProvider backend={HTML5Backend}>
+            <BurgerIngredients handleModalClose={handleModalClose} />
+            <BurgerConstructor handleModalClose={handleModalClose}/>
+        </DndProvider>
       </main>
     </div>
   );

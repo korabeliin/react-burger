@@ -5,7 +5,7 @@ import styles from './app-header.module.css';
 const AppHeader = () => {
     return (
         <header className={styles.appHeaderContainer}>
-            <div className={styles.test}>
+            <div className={styles.logo}>
                 <a href='#' className='mr-8'>
                     <div className='mr-2'>
                         <BurgerIcon type="primary" />

@@ -17,3 +17,11 @@ li .test {
     display: flex;
     justify-content: center;
 }
+
+li .showCounter {
+    visibility: visible;
+}
+
+li .hideCounter {
+    visibility: hidden;
+}

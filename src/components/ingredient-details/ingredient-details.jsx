@@ -1,9 +1,10 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import styles from "./ingredient-details.module.css";
-import PropTypes from "prop-types";
-import {ingredientType} from "../../utils/types";
+import { useSelector } from 'react-redux';
 
-const IngredientDetails = React.memo(({currentIngredient}) => {
+const IngredientDetails = () => {
+    
+    const currentIngredient = useSelector(store => store.currentIngredient.currentIngredient);
 
     return (
         <>
@@ -36,10 +37,6 @@ const IngredientDetails = React.memo(({currentIngredient}) => {
         </>
 
     );
-});
-
-IngredientDetails.propTypes = {
-    currentIngredient: ingredientType
-}
+};
 
 export default IngredientDetails;
