@@ -1,0 +1,17 @@
+.entranceNavigation {
+  display: flex;
+  align-items: center;
+}
+
+.entranceNavigation p {
+  margin-right: 10px;
+  color: #8585AD;
+}
+
+.entranceNavigation a {
+  color: #4C4CFF;
+}
+
+.entranceNavigation a:hover {
+  text-decoration: underline;
+}
