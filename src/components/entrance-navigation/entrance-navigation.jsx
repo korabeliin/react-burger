@@ -1,6 +1,6 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './entrance-navigation.module.css';
+import PropTypes from 'prop-types';
 
 const EntranceNavigation = ({text, link, linkText, secondText, secondLink, secondLinkText}) => {
   return (
@@ -20,5 +20,14 @@ const EntranceNavigation = ({text, link, linkText, secondText, secondLink, secon
     </>
   );
 };
+
+EntranceNavigation.propTypes = {
+  text: PropTypes.string.isRequired,
+  link: PropTypes.string.isRequired,
+  linkText: PropTypes.string.isRequired,
+  secondText: PropTypes.string,
+  secondLink: PropTypes.string,
+  secondLinkText: PropTypes.string
+}
 
 export default EntranceNavigation;

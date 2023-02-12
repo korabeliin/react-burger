@@ -1,4 +1,4 @@
-import React, {useRef, useState, useMemo, useEffect} from 'react';
+import {useState, useMemo} from 'react';
 import PropTypes from 'prop-types';
 import styles from './burger-ingredients.module.css';
 import {Tab} from "@ya.praktikum/react-developer-burger-ui-components";
@@ -10,7 +10,7 @@ import { useInView } from 'react-intersection-observer';
 
 const BurgerIngredients = ({handleModalClose}) => {
 
-    const [current, setCurrent] = useState('buns');
+    const [, setCurrent] = useState('buns');
 
     const ingredients = useSelector(store => store.ingredients.ingredients);
     const currentIngredient = useSelector(store => store.currentIngredient.currentIngredient);

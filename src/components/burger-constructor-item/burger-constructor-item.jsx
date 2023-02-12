@@ -31,7 +31,7 @@ const BurgerConstructorItem = ({text, thumbnail, price, id, index}) => {
       },
       hover(item, monitor) {
         if (!stuffSortRef.current) return
-        // console.log('isOver', isOver)
+
         const dragIndex = item.index
         const hoverIndex = index
 
