@@ -2,7 +2,7 @@ import EntranceNavigation from '../../components/entrance-navigation/entrance-na
 import Entrance from '../../components/entrance/entrance';
 import { useInput } from './../../hooks/useInput';
 import {Input, PasswordInput} from "@ya.praktikum/react-developer-burger-ui-components";
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate, Navigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetPassword } from '../../utils/asyncFunctions';
 
@@ -12,16 +12,19 @@ const ResetPassword = () => {
 
   const password = useInput('');
   const code = useInput('');
+  const location = useLocation();
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const forgotPage = location.state && location.state.from;
 
   const body = {
     "password" : password.value, 
     "token" : code.value
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     dispatch(resetPassword(body))
       .then(res => {
         if(res.payload.success) {
@@ -36,10 +39,14 @@ const ResetPassword = () => {
     );
   }
 
+  if (!forgotPage) {
+    navigate(-1)
+  }
+
   return (
     <>
-      <form>
-        <Entrance title='Восстановление пароля' buttonText='Сохранить' onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
+        <Entrance title='Восстановление пароля' buttonText='Сохранить'>
           <PasswordInput
             {...password}
             name={'password'}

@@ -7,6 +7,10 @@
   width: 100%;
 }
 
+.burgerConstructorItem:not(:last-child) {
+  margin-bottom: 10px;
+}
+
 .bullets {
   position: absolute;
   left: -60px;

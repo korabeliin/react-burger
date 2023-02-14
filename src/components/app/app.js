@@ -10,60 +10,53 @@ import ResetPassword from '../../pages/reset-password/reset-password';
 import NotFound404 from '../../pages/not-found/not-found';
 import { fetchIngredientsData } from "../../redux/slices/ingredientsSlice";
 import { useDispatch, useSelector } from 'react-redux';
-import { CURRENT_INGREDIENT } from '../../redux/slices/currentIngredientSlice';
+import { CURRENT_INGREDIENT, SET_PATHNAME } from '../../redux/slices/currentIngredientSlice';
 import { ORDER_MODAL_STATE } from '../../redux/slices/orderSlice';
 import Profile from './../../pages/profile/profile';
 import { getUserData, updateToken } from '../../utils/asyncFunctions';
 import getCookie from '../../utils/getCookie';
+import setCookie from '../../utils/setCookie';
 import ProtectedRouteElement from '../protected-route-element/protected-route-element';
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import Modal from "../modal/modal";
 
-
 function App() {
-    const dispatch = useDispatch();
-    const currentIngredient = useSelector(store => store.currentIngredient.currentIngredient);
-    const ingredients = useSelector(store => store.ingredients.ingredients);
+  const dispatch = useDispatch();
+  const currentIngredient = useSelector(store => store.currentIngredient.currentIngredient);
+  const { accessToken } = useSelector(store => store.user);
 
-    const { accessToken } = useSelector(store => store.user);
-    const navigate = useNavigate();
-    const location = useLocation();
-    const background = location.state && location.state.background;
+  const navigate = useNavigate();
+  const location = useLocation();
+  const background = location.state && location.state.background;
 
-    const handleModalClose = () => {
-      dispatch(CURRENT_INGREDIENT(null))
-      dispatch(ORDER_MODAL_STATE(false))
-      navigate('/')
-    }
-
-    useEffect(() => {
-      dispatch(fetchIngredientsData())
-    }, [dispatch])
+  useEffect(() => {
+    dispatch(fetchIngredientsData())
+  }, [dispatch])
 
   useEffect(() => {
     if(accessToken) {
       dispatch(getUserData(accessToken))
     } else {
       const token = getCookie('token');
-      const body = {"token": token}
-      dispatch(updateToken(body))
-        .then(res => {
-        if (res.payload.success && res.payload.refreshToken) {
-          document.cookie = `token=${res.payload.refreshToken};`
-          navigate('/')
-        }
-      })
+      if(token) {
+        const body = {"token": token}
+        dispatch(updateToken(body))
+          .then(res => {
+          if (res.payload?.success && res.payload.refreshToken) {
+            setCookie('token', res.payload.refreshToken)
+            navigate('/')
+          }
+        })
+      }
     }
   }, [dispatch, accessToken])
 
-  if(location.pathname.includes('ingredients')) {
-    const currentItemId = location.pathname.split('/ingredients/')[1];
-    const ingredient = ingredients.find(el => el._id === currentItemId)
-    dispatch(CURRENT_INGREDIENT(ingredient))
-  } else {
+  const handleModalClose = () => {
     dispatch(CURRENT_INGREDIENT(null))
+    dispatch(ORDER_MODAL_STATE(false))
+    navigate('/')
   }
-
+  
   return (
     <>
       <div className={styles.app}>
@@ -93,7 +86,7 @@ function App() {
               element={
                 currentIngredient && 
                   <Modal onModalClose={handleModalClose} header='Детали ингредиента'>
-                      <IngredientDetails currentIngredient={currentIngredient} />
+                      <IngredientDetails />
                   </Modal>
               }/>
           </Routes>

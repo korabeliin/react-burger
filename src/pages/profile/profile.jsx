@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logoutRequest, updateUserData } from '../../utils/asyncFunctions';
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import getCookie from '../../utils/getCookie';
+import setCookie from '../../utils/setCookie';
 
 const Profile = () => {
 
@@ -63,7 +64,7 @@ const Profile = () => {
       dispatch(logoutRequest(body))
         .then(res => {
         if (res.payload.success) {
-          document.cookie = `token=''`
+          setCookie('token', '')
           navigate('/login')
         }
       })
@@ -156,7 +157,6 @@ const Profile = () => {
           <Outlet />
         </div>
       </section>
-      
     </>
   );
 };

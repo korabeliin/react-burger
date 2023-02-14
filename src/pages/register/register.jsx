@@ -1,4 +1,3 @@
-import React, {useEffect} from 'react';
 import EntranceNavigation from '../../components/entrance-navigation/entrance-navigation';
 import Entrance from '../../components/entrance/entrance';
 import { useInput } from './../../hooks/useInput';
@@ -22,7 +21,8 @@ const Register = () => {
     "password" : password.value
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     dispatch(createUser(body))
       .then(res => {
         if(res.payload.success) {
@@ -39,8 +39,8 @@ const Register = () => {
 
   return (
     <>
-      <form>
-        <Entrance title='Регистрация' buttonText='Зарегистрироваться' onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
+        <Entrance title='Регистрация' buttonText='Зарегистрироваться'>
           <Input
             {...name}
             type={'text'}

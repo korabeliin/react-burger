@@ -2,7 +2,7 @@ import EntranceNavigation from '../../components/entrance-navigation/entrance-na
 import Entrance from '../../components/entrance/entrance';
 import { useInput } from './../../hooks/useInput';
 import {EmailInput} from "@ya.praktikum/react-developer-burger-ui-components";
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate, Navigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { sendCode } from '../../utils/asyncFunctions';
 
@@ -13,14 +13,18 @@ const ForgotPassword = () => {
   const email = useInput('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const body = {"email" : email.value}
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('cle')
     dispatch(sendCode(body))
       .then(res => {
+        console.log(res)
         if(res.payload.success) {
-          navigate('/reset-password')
+          navigate('/reset-password', {state: { from: location }})
         }
       })
   }
@@ -33,8 +37,8 @@ const ForgotPassword = () => {
 
   return (
     <>
-      <form>
-        <Entrance title='Восстановление пароля' buttonText='Восстановить' onSubmit={handleSubmit} >
+      <form onSubmit={handleSubmit}>
+        <Entrance title='Восстановление пароля' buttonText='Восстановить'>
           <EmailInput
             {...email}
             name={'email'}

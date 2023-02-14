@@ -40,7 +40,7 @@ export const userSlice = createSlice({
       })
 
       .addCase(loginRequest.fulfilled, (state, action) => {
-        state.success = action.payload.success;
+        state.success = action.payload?.success;
         state.accessToken = action.payload?.accessToken?.split('Bearer ')[1];
         state.refreshToken = action.payload.refreshToken;
         state.password = action.meta.arg.password;
@@ -58,12 +58,12 @@ export const userSlice = createSlice({
       })
 
       .addCase(updateToken.fulfilled, (state, action) => {
-        state.success = action.payload.success
+        state.success = action.payload?.success
         state.accessToken = action.payload?.accessToken?.split('Bearer ')[1];
         state.refreshToken = action.payload.refreshToken;
       })
       .addCase(updateToken.rejected, (state, action) => {
-        state.success = action.payload.success
+        state.success = action.payload?.success
       })
 
       .addCase(logoutRequest.fulfilled, (state) => {
@@ -77,7 +77,7 @@ export const userSlice = createSlice({
       })
 
       .addCase(updateUserData.fulfilled, (state, action) => {
-        state.success = action.payload.success;
+        state.success = action.payload?.success;
         state.user = action.payload.user;
         state.password = action.meta.arg.user.password;
       })

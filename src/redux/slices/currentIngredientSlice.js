@@ -8,7 +8,10 @@ export const currentIngredientSlice = createSlice({
   reducers: {
     CURRENT_INGREDIENT: (state, action) => {
       state.currentIngredient = action.payload
-    }
+    },
+    SET_PATHNAME: (state, action) => {
+      state.pathname = action.payload
+    },
   }
 });
 

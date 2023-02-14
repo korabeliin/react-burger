@@ -81,7 +81,7 @@ const BurgerConstructorItem = ({text, thumbnail, price, id, index}) => {
 
   return (
     <li 
-      className={`${styles.burgerConstructorItem} mb-4`} 
+      className={`${styles.burgerConstructorItem} mr-3`} 
       style={{opacity}} ref={stuffSortRef} 
       data-handler-id={handlerId}>
       <div className={styles.bullets}>
