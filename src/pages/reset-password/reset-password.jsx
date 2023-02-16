@@ -1,3 +1,4 @@
+import {useEffect} from 'react';
 import EntranceNavigation from '../../components/entrance-navigation/entrance-navigation';
 import Entrance from '../../components/entrance/entrance';
 import { useInput } from './../../hooks/useInput';
@@ -16,7 +17,7 @@ const ResetPassword = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const forgotPage = location.state && location.state.from;
+  const forgotPage = location.state && location.state.from.pathname === '/forgot-password';
 
   const body = {
     "password" : password.value, 
@@ -33,15 +34,17 @@ const ResetPassword = () => {
       })
   }
 
-  if (user) { 
-    return (
-      <Navigate to="/" replace />
-    );
-  }
+  useEffect(() => {
+    if (forgotPage === null) {
+      navigate(-1)
+    }
+  }, [])
 
-  if (!forgotPage) {
-    navigate(-1)
-  }
+  if (user) { 
+      return (
+        <Navigate to="/" replace />
+      );
+    }
 
   return (
     <>
