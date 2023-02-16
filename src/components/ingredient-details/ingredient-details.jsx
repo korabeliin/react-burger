@@ -1,22 +1,21 @@
 import {useEffect} from 'react';
 import styles from "./ingredient-details.module.css";
 import { useSelector, useDispatch } from 'react-redux';
-import { useLocation  } from 'react-router-dom'; 
+import { useLocation, useParams  } from 'react-router-dom'; 
 import { CURRENT_INGREDIENT  } from "../../redux/slices/currentIngredientSlice";
 
 const IngredientDetails = () => {
 
     const dispatch = useDispatch();
     const ingredients = useSelector(store => store.ingredients.ingredients);
+    const currentIngredient = useSelector(store => store.currentIngredient.currentIngredient);
     const location = useLocation();
+    const {id: currentItemId} = useParams();
 
     useEffect(() => {
-        const currentItemId = location.pathname.split('/ingredients/')[1];
         const ingredient = ingredients.find(el => el._id === currentItemId)
         dispatch(CURRENT_INGREDIENT(ingredient))
-    }, [location])
-    
-    const currentIngredient = useSelector(store => store.currentIngredient.currentIngredient);
+    }, [location, currentItemId, ingredients, dispatch])
     
     return (
         <>

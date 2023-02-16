@@ -4,16 +4,12 @@ import styles from './burger-ingredients.module.css';
 import {Tab} from "@ya.praktikum/react-developer-burger-ui-components";
 import BurgerIngredientsItem from "../burger-ingredients-item/burger-ingredients-item";
 import { useSelector } from 'react-redux';
-import IngredientDetails from "../ingredient-details/ingredient-details";
-import Modal from "../modal/modal";
 import { useInView } from 'react-intersection-observer';
 
-const BurgerIngredients = ({handleModalClose}) => {
+const BurgerIngredients = () => {
 
     const [, setCurrent] = useState('buns');
-
     const ingredients = useSelector(store => store.ingredients.ingredients);
-    const currentIngredient = useSelector(store => store.currentIngredient.currentIngredient);
 
     const onTabClick = (tab) => {
         setCurrent(tab);
@@ -100,11 +96,6 @@ const BurgerIngredients = ({handleModalClose}) => {
                     </ul>
                 </div>
             </div>
-            {currentIngredient && 
-                <Modal onModalClose={handleModalClose} header='Детали ингредиента'>
-                    <IngredientDetails currentIngredient={currentIngredient} />
-                </Modal>
-            }
         </section>
     );
 };

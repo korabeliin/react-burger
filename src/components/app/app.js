@@ -1,5 +1,5 @@
 import {useEffect} from 'react';
-import { Routes, Route, useNavigate, useLocation  } from 'react-router-dom'; 
+import { Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom'; 
 import AppHeader from "../app-header/app-header";
 import styles from './app.module.css';
 import BurgerMain from '../../pages/burger-main/burger-main';
@@ -10,7 +10,7 @@ import ResetPassword from '../../pages/reset-password/reset-password';
 import NotFound404 from '../../pages/not-found/not-found';
 import { fetchIngredientsData } from "../../redux/slices/ingredientsSlice";
 import { useDispatch, useSelector } from 'react-redux';
-import { CURRENT_INGREDIENT, SET_PATHNAME } from '../../redux/slices/currentIngredientSlice';
+import { CURRENT_INGREDIENT } from '../../redux/slices/currentIngredientSlice';
 import { ORDER_MODAL_STATE } from '../../redux/slices/orderSlice';
 import Profile from './../../pages/profile/profile';
 import { getUserData, updateToken } from '../../utils/asyncFunctions';
@@ -22,7 +22,6 @@ import Modal from "../modal/modal";
 
 function App() {
   const dispatch = useDispatch();
-  const currentIngredient = useSelector(store => store.currentIngredient.currentIngredient);
   const { accessToken } = useSelector(store => store.user);
 
   const navigate = useNavigate();
@@ -44,7 +43,9 @@ function App() {
           .then(res => {
           if (res.payload?.success && res.payload.refreshToken) {
             setCookie('token', res.payload.refreshToken)
-            navigate('/')
+            return (
+              <Navigate to={location?.state?.from?.pathname || '/'} />
+            );
           }
         })
       }
@@ -68,7 +69,7 @@ function App() {
           <Route path='/register' element={<Register />} />
           <Route path='/forgot-password' element={<ForgotPassword />} />
           <Route path='/reset-password' element={<ResetPassword />} />
-          <Route path='ingredients/:id' element={<IngredientDetails />} />
+          <Route path='/ingredients/:id' element={<IngredientDetails />} />
 
           <Route 
             path='/profile'
@@ -82,12 +83,11 @@ function App() {
         {background &&
           <Routes>
             <Route 
-              path="ingredients/:id" 
+              path="/ingredients/:id" 
               element={
-                currentIngredient && 
-                  <Modal onModalClose={handleModalClose} header='Детали ингредиента'>
-                      <IngredientDetails />
-                  </Modal>
+                <Modal onModalClose={handleModalClose} header='Детали ингредиента'>
+                  <IngredientDetails />
+                </Modal>
               }/>
           </Routes>
         }
