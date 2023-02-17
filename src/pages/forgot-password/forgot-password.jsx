@@ -19,7 +19,6 @@ const ForgotPassword = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('cle')
     dispatch(sendCode(body))
       .then(res => {
         console.log(res)
