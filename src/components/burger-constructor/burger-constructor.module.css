@@ -8,7 +8,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    max-height: 400px;
+    max-height: calc(100vh - 320px);
 }
 
 .burgerContainer ul {

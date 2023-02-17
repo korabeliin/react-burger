@@ -1,0 +1,35 @@
+.profile {
+  display: flex;
+  justify-content: flex-start;
+  width: 80%;
+}
+
+.profileLinksContainer {
+  display: flex;
+  flex-direction: column;
+  width: 350px;
+}
+
+.profileInputsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.profileLinks {
+  display: flex;
+  flex-direction: column;
+  height: 250px;
+}
+
+.plainInput {
+  position: relative;
+}
+
+.editIcon {
+  position: absolute;
+  right: 24px;
+  top: 22px;
+  cursor: pointer;
+  /* z-index: 100; */
+}

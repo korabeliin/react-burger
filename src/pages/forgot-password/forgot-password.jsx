@@ -1,17 +1,44 @@
-import React from 'react';
 import EntranceNavigation from '../../components/entrance-navigation/entrance-navigation';
 import Entrance from '../../components/entrance/entrance';
 import { useInput } from './../../hooks/useInput';
 import {EmailInput} from "@ya.praktikum/react-developer-burger-ui-components";
+import { useNavigate, Navigate, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { sendCode } from '../../utils/asyncFunctions';
 
 const ForgotPassword = () => {
 
+  const {user} = useSelector(store => store.user);
+
   const email = useInput('');
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const location = useLocation();
+
+  const body = {"email" : email.value}
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('cle')
+    dispatch(sendCode(body))
+      .then(res => {
+        console.log(res)
+        if(res.payload.success) {
+          navigate('/reset-password', {state: { from: location }})
+        }
+      })
+  }
+
+  if (user) {
+    return (
+      <Navigate to="/" replace />
+    );
+  }
 
   return (
     <>
-      <form>
-        <Entrance title='Восстановление пароля' buttonText='Восстановить' >
+      <form onSubmit={handleSubmit}>
+        <Entrance title='Восстановление пароля' buttonText='Восстановить'>
           <EmailInput
             {...email}
             name={'email'}

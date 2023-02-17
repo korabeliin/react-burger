@@ -1,16 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import URL from '../../api/ingredientsAPI';
+import { ingredientsURL } from '../../api/ingredientsAPI';
+import request from './../../utils/request';
 
 export const fetchIngredientsData = createAsyncThunk(
   'ingredients/fetchIngredients',
-  async (_, thunkAPI) => {
-    try {
-      const res = await fetch(URL);
-      const data = await res.json()
-      return data
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e)
-    }
+  async () => {
+    const data = request(ingredientsURL)
+    return data
   }
 )
 
@@ -21,7 +17,6 @@ export const ingredientsSlice = createSlice({
     isLoading: false,
     error: false
   },
-  // reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchIngredientsData.pending, (state) => {

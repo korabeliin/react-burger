@@ -1,17 +1,47 @@
-import React from 'react';
 import EntranceNavigation from '../../components/entrance-navigation/entrance-navigation';
 import Entrance from '../../components/entrance/entrance';
 import { useInput } from './../../hooks/useInput';
 import {EmailInput, PasswordInput} from "@ya.praktikum/react-developer-burger-ui-components";
+import { Navigate, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginRequest } from '../../utils/asyncFunctions';
+import setCookie from '../../utils/setCookie';
 
 const Login = () => {
 
   const email = useInput('');
   const password = useInput('');
+  const dispatch = useDispatch();
+  const location = useLocation();
+
+  console.log(location)
+
+  const { user } = useSelector(store => store.user);
+
+  const body = {
+    "email" : email.value,
+    "password" : password.value
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(loginRequest(body))
+      .then(res => {
+        if (res.payload.success && res.payload.refreshToken) {
+          setCookie('token', res.payload.refreshToken);
+        }
+      })
+  }
+
+  if (user) {
+    return (
+      <Navigate to={location?.state?.from.pathname || '/'} />
+    );
+  }
   
   return (
     <>
-      <form>
+      <form onSubmit={handleSubmit}>
         <Entrance title='Вход' buttonText='Войти' >
           <EmailInput
             {...email}

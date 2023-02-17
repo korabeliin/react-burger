@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import {useMemo} from 'react';
 import PropTypes from 'prop-types';
 import BurgerConstructorItem from '../burger-constructor-item/burger-constructor-item';
 import styles from './burger-constructor.module.css';
@@ -13,6 +13,7 @@ import {
     ADD_STUFFING_TO_CONSTRUCTOR,
     ADD_BUN_TO_CONSTRUCTOR
 } from '../../redux/slices/constructorIngredientsSlice';
+import { useNavigate } from 'react-router-dom';
 
 const BurgerConstructor = ({handleModalClose}) => {
 
@@ -20,6 +21,8 @@ const BurgerConstructor = ({handleModalClose}) => {
     const stuffing = useSelector(store => store.constructorIngredients.constructorIngredients.stuffing);
     const bun = useSelector(store => store.constructorIngredients.constructorIngredients.bun);
     const order = useSelector(store => store.order.order);
+    const { user } = useSelector(store => store.user);
+    const navigate = useNavigate();
 
     const dispatch = useDispatch();
 
@@ -76,6 +79,9 @@ const BurgerConstructor = ({handleModalClose}) => {
     const handleOrderButtonClick = () => {
         if(stuffing.length) {
             dispatch(ORDER_MODAL_STATE(true))
+        }
+        if(!user) {
+            navigate('/login');
         }
     }
 

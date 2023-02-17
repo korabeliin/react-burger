@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import {useMemo} from 'react';
 import styles from './burger-ingredients-item.module.css';
 import {Counter, CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import {ingredientType} from "../../utils/types";
@@ -6,10 +6,12 @@ import { useDrag } from "react-dnd";
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { CURRENT_INGREDIENT } from '../../redux/slices/currentIngredientSlice';
+import { Link, useLocation } from 'react-router-dom';
 
 const BurgerIngredientsItem = ({ingredient}) => {
 
     const dispatch = useDispatch();
+    const location = useLocation();
     const stuffing = useSelector(store => store.constructorIngredients.constructorIngredients.stuffing);
     const bun = useSelector(store => store.constructorIngredients.constructorIngredients.bun);
 
@@ -29,10 +31,12 @@ const BurgerIngredientsItem = ({ingredient}) => {
 
     return (
         <>
-            <li 
+            <Link
+                to={`/ingredients/${ingredient._id}`}
                 ref={ingredient.type === 'bun' ? bunRef : stuffingRef} 
-                className='pl-4 pr-4 mb-10' 
+                className={`${styles.ingredientItem} pl-4 pr-4 mb-10`} 
                 onClick={() => dispatch(CURRENT_INGREDIENT(ingredient))}
+                state={{background: location}}
             >
                 {
                     ingredient.type === 'bun' ?
@@ -51,7 +55,7 @@ const BurgerIngredientsItem = ({ingredient}) => {
                     <div className='ml-2'><CurrencyIcon type="primary" /></div>
                 </span>
                 <p className="text text_type_main-default">{ingredient.name}</p>
-            </li>
+            </Link>
         </>
     );
 };
