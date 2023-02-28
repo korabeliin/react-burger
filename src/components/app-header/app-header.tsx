@@ -1,4 +1,3 @@
-import React from 'react';
 import {BurgerIcon, ListIcon, Logo, ProfileIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './app-header.module.css';
 import { NavLink, useLocation } from 'react-router-dom';
@@ -29,7 +28,6 @@ const AppHeader = () => {
                     >
                     <div className='mr-2'>
                         <ListIcon 
-                            className='mr-2' 
                             type={location.pathname === '/orders' ? 'primary' : 'secondary'} />
                     </div>
                     <p className="text text_type_main-default">Лента заказов</p>
@@ -45,7 +43,6 @@ const AppHeader = () => {
                 >
                 <div className='mr-2'>
                     <ProfileIcon 
-                        className='mr-2' 
                         type={location.pathname === '/profile' ? 'primary' : 'secondary'} />
                 </div>
                 <p className="text text_type_main-default">Личный кабинет</p>

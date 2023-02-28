@@ -1,17 +1,17 @@
 import {useState, useMemo} from 'react';
-import PropTypes from 'prop-types';
 import styles from './burger-ingredients.module.css';
 import {Tab} from "@ya.praktikum/react-developer-burger-ui-components";
 import BurgerIngredientsItem from "../burger-ingredients-item/burger-ingredients-item";
 import { useSelector } from 'react-redux';
 import { useInView } from 'react-intersection-observer';
+import {TIngredient} from "../../utils/types";
 
 const BurgerIngredients = () => {
 
     const [, setCurrent] = useState('buns');
-    const ingredients = useSelector(store => store.ingredients.ingredients);
+    const ingredients = useSelector((store: any) => store.ingredients.ingredients);
 
-    const onTabClick = (tab) => {
+    const onTabClick = (tab:string) => {
         setCurrent(tab);
         const element = document.getElementById(tab);
         if(element) element.scrollIntoView({behavior: "smooth", block: "nearest"});
@@ -19,15 +19,15 @@ const BurgerIngredients = () => {
 
 
     const buns = useMemo(() => {
-        return ingredients.filter(el => el.type === 'bun')
+        return ingredients.filter((el: TIngredient) => el.type === 'bun')
     }, [ingredients])
 
     const sauces = useMemo(() => {
-        return ingredients.filter(el => el.type === 'sauce')
+        return ingredients.filter((el: TIngredient) => el.type === 'sauce')
     }, [ingredients])
 
     const fillings = useMemo(() => {
-        return ingredients.filter(el => el.type === 'main')
+        return ingredients.filter((el: TIngredient) => el.type === 'main')
     }, [ingredients])
 
 
@@ -62,7 +62,7 @@ const BurgerIngredients = () => {
                 <div ref={bunsRef} id='buns'>
                     <h3 className="mt-10 text text_type_main-medium">Булки</h3>
                     <ul className='pl-4 pr-4 pt-4'>
-                        {buns.map(el =>
+                        {buns.map((el: TIngredient) =>
                                 <BurgerIngredientsItem
                                     key={el._id}
                                     ingredient={el}
@@ -74,7 +74,7 @@ const BurgerIngredients = () => {
                 <div ref={saucesRef} id='sauces'>
                     <h3 className="mt-10 text text_type_main-medium">Соусы</h3>
                     <ul className='pl-4 pr-4 pt-4'>
-                        {sauces.map(el =>
+                        {sauces.map((el: TIngredient) =>
                                 <BurgerIngredientsItem
                                     key={el._id}
                                     ingredient={el}
@@ -86,7 +86,7 @@ const BurgerIngredients = () => {
                 <div ref={fillingsRef} id='fillings'>
                     <h3 className="mt-10 text text_type_main-medium">Начинки</h3>
                     <ul className='pl-4 pr-4 pt-4'>
-                        {fillings.map(el =>
+                        {fillings.map((el: TIngredient) =>
                                 <BurgerIngredientsItem
                                     key={el._id}
                                     ingredient={el}
@@ -99,9 +99,5 @@ const BurgerIngredients = () => {
         </section>
     );
 };
-
-BurgerIngredients.propTypes = {
-    handleModalClose: PropTypes.func.isRequired
-}
 
 export default BurgerIngredients;

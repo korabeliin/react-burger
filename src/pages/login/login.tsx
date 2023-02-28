@@ -1,11 +1,12 @@
 import EntranceNavigation from '../../components/entrance-navigation/entrance-navigation';
 import Entrance from '../../components/entrance/entrance';
-import { useInput } from './../../hooks/useInput';
+import { useInput } from '../../hooks/useInput';
 import {EmailInput, PasswordInput} from "@ya.praktikum/react-developer-burger-ui-components";
 import { Navigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginRequest } from '../../utils/asyncFunctions';
 import setCookie from '../../utils/setCookie';
+import {TResponse} from "../../utils/types";
 
 const Login = () => {
 
@@ -16,17 +17,17 @@ const Login = () => {
 
   console.log(location)
 
-  const { user } = useSelector(store => store.user);
+  const { user } = useSelector((store:any) => store.user);
 
   const body = {
     "email" : email.value,
     "password" : password.value
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(loginRequest(body))
-      .then(res => {
+      .then((res: TResponse) => {
         if (res.payload.success && res.payload.refreshToken) {
           setCookie('token', res.payload.refreshToken);
         }

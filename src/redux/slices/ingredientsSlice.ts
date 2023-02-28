@@ -1,8 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ingredientsURL } from '../../api/ingredientsAPI';
-import request from './../../utils/request';
+import { IngredientsAPI } from '../../api/ingredientsAPI';
+import request from '../../utils/request';
 
-export const fetchIngredientsData = createAsyncThunk(
+const { ingredientsURL } = IngredientsAPI;
+
+export const fetchIngredientsData:any = createAsyncThunk(
   'ingredients/fetchIngredients',
   async () => {
     const data = request(ingredientsURL)
@@ -30,8 +32,9 @@ export const ingredientsSlice = createSlice({
       .addCase(fetchIngredientsData.rejected, (state) => {
         state.isLoading = false;
         state.error = true;
-      })
-  }
+      });
+  },
+  reducers: {}
 });
 
 export default ingredientsSlice.reducer;

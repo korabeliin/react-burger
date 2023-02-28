@@ -1,16 +1,20 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import request from './request';
-import { 
-  registerURL, 
-  forgotPasswordURL, 
-  resetPasswordURL, 
-  loginURL, 
-  userDataURL,
-  updateTokenURL,
-  logoutURL
- } from '../api/ingredientsAPI';
+// import { 
+//   registerURL, 
+//   forgotPasswordURL, 
+//   resetPasswordURL, 
+//   loginURL, 
+//   userDataURL,
+//   updateTokenURL,
+//   logoutURL
+//  } from '../api/ingredientsAPI';
 
-export const createUser = createAsyncThunk(
+ import {IngredientsAPI} from '../api/ingredientsAPI';
+
+ const { registerURL, forgotPasswordURL, resetPasswordURL, loginURL, userDataURL, updateTokenURL, logoutURL } = IngredientsAPI;
+
+export const createUser:any = createAsyncThunk(
   'user/createUser',
   async (body) => {
       const data = request(registerURL, {
@@ -24,7 +28,7 @@ export const createUser = createAsyncThunk(
   }
 )
 
-export const sendCode = createAsyncThunk(
+export const sendCode:any = createAsyncThunk(
   'user/sendCode',
   async (body, ) => {
     const data = request(forgotPasswordURL, {
@@ -38,7 +42,7 @@ export const sendCode = createAsyncThunk(
   }
 )
 
-export const resetPassword = createAsyncThunk(
+export const resetPassword:any = createAsyncThunk(
   'user/resetPassword',
   async (body) => {
     const data = request(resetPasswordURL, {
@@ -52,7 +56,7 @@ export const resetPassword = createAsyncThunk(
   }
 )
 
-export const loginRequest = createAsyncThunk(
+export const loginRequest:any = createAsyncThunk(
   'user/loginRequest',
   async (body) => {
     const data = request(loginURL, {
@@ -66,7 +70,7 @@ export const loginRequest = createAsyncThunk(
   }
 )
 
-export const getUserData = createAsyncThunk(
+export const getUserData:any = createAsyncThunk(
   'user/getUserData',
   async (token) => {
     const data = request(userDataURL, {
@@ -80,7 +84,7 @@ export const getUserData = createAsyncThunk(
   }
 )
 
-export const updateToken = createAsyncThunk(
+export const updateToken:any = createAsyncThunk(
   'user/updateToken',
   async (body) => {
     const data = request(updateTokenURL, {
@@ -94,7 +98,7 @@ export const updateToken = createAsyncThunk(
   }
 )
 
-export const logoutRequest = createAsyncThunk(
+export const logoutRequest:any = createAsyncThunk(
   'user/logoutRequest',
   async (body) => {
     const data = request(logoutURL, {
@@ -108,9 +112,9 @@ export const logoutRequest = createAsyncThunk(
   }
 )
 
-export const updateUserData = createAsyncThunk(
+export const updateUserData:any = createAsyncThunk(
   'user/updateUserData',
-  async (userInfo) => {
+  async (userInfo:any) => {
     const data = request(userDataURL, {
       method: 'PATCH',
       body: JSON.stringify(userInfo.user),

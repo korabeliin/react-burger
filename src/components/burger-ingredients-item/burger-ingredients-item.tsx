@@ -1,22 +1,26 @@
-import {useMemo} from 'react';
+import {FC, useMemo} from 'react';
 import styles from './burger-ingredients-item.module.css';
 import {Counter, CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
-import {ingredientType} from "../../utils/types";
+import {TIngredient, TConstructorIngredient} from "../../utils/types";
 import { useDrag } from "react-dnd";
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { CURRENT_INGREDIENT } from '../../redux/slices/currentIngredientSlice';
 import { Link, useLocation } from 'react-router-dom';
 
-const BurgerIngredientsItem = ({ingredient}) => {
+type TBurgerIngredientsItem = {
+    ingredient: TIngredient;
+}
+
+const BurgerIngredientsItem: FC<TBurgerIngredientsItem> = ({ingredient}) => {
 
     const dispatch = useDispatch();
     const location = useLocation();
-    const stuffing = useSelector(store => store.constructorIngredients.constructorIngredients.stuffing);
-    const bun = useSelector(store => store.constructorIngredients.constructorIngredients.bun);
+    const stuffing = useSelector((store: any) => store.constructorIngredients.constructorIngredients.stuffing);
+    const bun = useSelector((store: any) => store.constructorIngredients.constructorIngredients.bun);
 
     const counter = useMemo(() => {
-        return stuffing.filter(el => el.ingredient._id === ingredient._id).length;
+        return stuffing.filter((el: TConstructorIngredient) => el.ingredient._id === ingredient._id).length;
     }, [stuffing])
 
     const [, stuffingRef] = useDrag({
@@ -59,9 +63,5 @@ const BurgerIngredientsItem = ({ingredient}) => {
         </>
     );
 };
-
-BurgerIngredientsItem.propTypes = {
-    ingredient: ingredientType.isRequired
-}
 
 export default BurgerIngredientsItem;

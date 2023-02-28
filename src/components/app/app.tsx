@@ -12,17 +12,18 @@ import { fetchIngredientsData } from "../../redux/slices/ingredientsSlice";
 import { useDispatch, useSelector } from 'react-redux';
 import { CURRENT_INGREDIENT } from '../../redux/slices/currentIngredientSlice';
 import { ORDER_MODAL_STATE } from '../../redux/slices/orderSlice';
-import Profile from './../../pages/profile/profile';
+import Profile from '../../pages/profile/profile';
 import { getUserData, updateToken } from '../../utils/asyncFunctions';
 import getCookie from '../../utils/getCookie';
 import setCookie from '../../utils/setCookie';
 import ProtectedRouteElement from '../protected-route-element/protected-route-element';
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import Modal from "../modal/modal";
+import {TResponse} from "../../utils/types";
 
 function App() {
   const dispatch = useDispatch();
-  const { accessToken } = useSelector(store => store.user);
+  const { accessToken } = useSelector((store: any) => store.user);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -40,7 +41,7 @@ function App() {
       if(token) {
         const body = {"token": token}
         dispatch(updateToken(body))
-          .then(res => {
+          .then((res: TResponse) => {
           if (res.payload?.success && res.payload.refreshToken) {
             setCookie('token', res.payload.refreshToken)
             return (
