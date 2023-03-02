@@ -1,11 +1,11 @@
-import {useMemo} from 'react';
-import PropTypes from 'prop-types';
+import {FC, useMemo} from 'react';
 import BurgerConstructorItem from '../burger-constructor-item/burger-constructor-item';
 import styles from './burger-constructor.module.css';
 import {Button, ConstructorElement, CurrencyIcon} from "@ya.praktikum/react-developer-burger-ui-components";
 import { useSelector, useDispatch } from 'react-redux';
 import { ORDER_MODAL_STATE } from '../../redux/slices/orderSlice';
 import OrderDetails from "../order-details/order-details";
+import {TIngredient, TConstructorIngredient} from "../../utils/types";
 import Modal from "../modal/modal";
 import { useDrop} from "react-dnd";
 import { v4 as uuidv4 } from 'uuid';
@@ -15,30 +15,39 @@ import {
 } from '../../redux/slices/constructorIngredientsSlice';
 import { useNavigate } from 'react-router-dom';
 
-const BurgerConstructor = ({handleModalClose}) => {
 
-    const ingredients = useSelector(store => store.ingredients.ingredients);
-    const stuffing = useSelector(store => store.constructorIngredients.constructorIngredients.stuffing);
-    const bun = useSelector(store => store.constructorIngredients.constructorIngredients.bun);
-    const order = useSelector(store => store.order.order);
-    const { user } = useSelector(store => store.user);
+type TBurgerConstructor = {
+    handleModalClose: () => void;
+}
+
+type TItemId = {
+    id: string;
+}
+
+const BurgerConstructor: FC<TBurgerConstructor> = ({handleModalClose}) => {
+
+    const ingredients = useSelector((store: any) => store.ingredients.ingredients);
+    const stuffing = useSelector((store: any) => store.constructorIngredients.constructorIngredients.stuffing);
+    const bun = useSelector((store: any) => store.constructorIngredients.constructorIngredients.bun);
+    const order = useSelector((store: any) => store.order.order);
+    const { user } = useSelector((store: any) => store.user);
     const navigate = useNavigate();
 
     const dispatch = useDispatch();
 
-    const handleStuffDrop = (itemId) => {
+    const handleStuffDrop = (itemId: TItemId) => {
         
         const stuff = {
-            ingredient: ingredients.find(el => el._id === itemId.id),
+            ingredient: ingredients.find((el:TIngredient) => el._id === itemId.id),
             key: uuidv4()
         }
         dispatch(ADD_STUFFING_TO_CONSTRUCTOR(stuff))
     }
 
-    const handleBunDrop = (itemId) => {
+    const handleBunDrop = (itemId: TItemId) => {
 
         const bun = {
-            bunInfo: ingredients.find(el => el._id === itemId.id),
+            bunInfo: ingredients.find((el:TIngredient) => el._id === itemId.id),
             chosen: true
         } 
         
@@ -58,7 +67,7 @@ const BurgerConstructor = ({handleModalClose}) => {
 
     const [{isHover}, constructorStuffingDropTarget] = useDrop({
         accept: "stuffing",
-        drop(itemId) {
+        drop(itemId: TItemId) {
             handleStuffDrop(itemId);
         },
         collect: monitor => {
@@ -68,7 +77,7 @@ const BurgerConstructor = ({handleModalClose}) => {
 
     const [{isBunHover}, constructorBunDropTarget] = useDrop({
         accept: "bun",
-        drop(itemId) {
+        drop(itemId: TItemId) {
             handleBunDrop(itemId);
         },
         collect: monitor => {
@@ -106,7 +115,7 @@ const BurgerConstructor = ({handleModalClose}) => {
                 <ul ref={constructorStuffingDropTarget} className='custom-scroll'>
 
                     {stuffing.length ? 
-                        stuffing.map((el, i) => {
+                        stuffing.map((el: TConstructorIngredient, i:number) => {
                             if(el.ingredient.type === 'bun') return;
                             return (
                                 <BurgerConstructorItem 
@@ -156,9 +165,5 @@ const BurgerConstructor = ({handleModalClose}) => {
         </section>
     );
 };
-
-BurgerConstructor.propTypes = {
-    handleModalClose: PropTypes.func.isRequired
-}
 
 export default BurgerConstructor;

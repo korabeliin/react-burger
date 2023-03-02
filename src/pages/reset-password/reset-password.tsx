@@ -1,15 +1,16 @@
 import {useEffect} from 'react';
 import EntranceNavigation from '../../components/entrance-navigation/entrance-navigation';
 import Entrance from '../../components/entrance/entrance';
-import { useInput } from './../../hooks/useInput';
+import { useInput } from '../../hooks/useInput';
 import {Input, PasswordInput} from "@ya.praktikum/react-developer-burger-ui-components";
 import { useNavigate, Navigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetPassword } from '../../utils/asyncFunctions';
+import {TResponse} from "../../utils/types";
 
 const ResetPassword = () => {
 
-  const { user } = useSelector(store => store.user);
+  const { user } = useSelector((store:any) => store.user);
 
   const password = useInput('');
   const code = useInput('');
@@ -24,10 +25,10 @@ const ResetPassword = () => {
     "token" : code.value
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(resetPassword(body))
-      .then(res => {
+      .then((res:TResponse) => {
         if(res.payload.success) {
           navigate('/login')
         }
@@ -59,7 +60,6 @@ const ResetPassword = () => {
             {...code}
             type={'text'}
             name={'code'}
-            isIcon={false}
             extraClass="mb-6"
             placeholder='Введите код из письма'
           />

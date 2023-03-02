@@ -1,8 +1,14 @@
 import styles from './entrance.module.css';
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
-import PropTypes from 'prop-types';
+import { FC } from 'react';
 
-const Entrance = ({children, title, buttonText}) => {
+type TEntrance = {
+  title: string;
+  buttonText: string;
+  children: React.ReactNode;
+}
+
+const Entrance: FC<TEntrance> = ({children, title, buttonText}) => {
   return (
     <section className={`${styles.entrance} mt-15`}>
       <h3 className='text text_type_main-medium mb-6'>{title}</h3>
@@ -13,11 +19,5 @@ const Entrance = ({children, title, buttonText}) => {
     </section>
   );
 };
-
-Entrance.propTypes = {
-  children: PropTypes.node.isRequired,
-  title: PropTypes.string,
-  buttonText: PropTypes.string.isRequired
-}
 
 export default Entrance;

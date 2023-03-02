@@ -1,30 +1,43 @@
-import React, {useRef} from 'react';
-import PropTypes from 'prop-types';
+import {FC, useRef} from 'react';
 import styles from './burger-constructor-item.module.css';
 import { ConstructorElement, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useSelector, useDispatch } from 'react-redux';
-import { useDrop, useDrag } from "react-dnd";
+import { useDrop, useDrag, DropTargetMonitor } from "react-dnd";
 
 import { SORT_STUFFING, DELETE_STUFF_FROM_CONSTRUCTOR } from '../../redux/slices/constructorIngredientsSlice';
 
-const BurgerConstructorItem = ({text, thumbnail, price, id, index}) => {
 
-  const stuffing = useSelector(store => store.constructorIngredients.constructorIngredients.stuffing);
+type TBurgerConstructorItem = {
+  text: string;
+  thumbnail: string;
+  price: number;
+  id: string;
+  index: number;
+}
+
+type THoverItem = {
+  id: string;
+  index: number;
+}
+
+const BurgerConstructorItem: FC<TBurgerConstructorItem> = ({text, thumbnail, price, id, index}) => {
+
+  const stuffing = useSelector((store:any) => store.constructorIngredients.constructorIngredients.stuffing);
 
   const dispatch = useDispatch();
 
-  const handleStuffDelete = (key) => {
+  const handleStuffDelete = (key:string) => {
     if(stuffing[index].key === key) {
       dispatch(DELETE_STUFF_FROM_CONSTRUCTOR(key))
     }
   }
 
   // SORT PART
-    const stuffSortRef = useRef(null)
+    const stuffSortRef = useRef<HTMLLIElement>(null)
 
     const [{ handlerId }, drop] = useDrop({
       accept: 'stuffingSort',
-      collect(monitor) {
+      collect(monitor: DropTargetMonitor<THoverItem>) {
         return {
           handlerId: monitor.getHandlerId()
         }
@@ -45,7 +58,7 @@ const BurgerConstructorItem = ({text, thumbnail, price, id, index}) => {
         // Determine mouse position
         const clientOffset = monitor.getClientOffset()
         // Get pixels to the top
-        const hoverClientY = clientOffset.y - hoverBoundingRect.top
+        const hoverClientY = clientOffset!.y - hoverBoundingRect.top
         // Only perform the move when the mouse has crossed half of the items height
         // When dragging downwards, only move when the cursor is below 50%
         // When dragging upwards, only move when the cursor is above 50%
@@ -69,10 +82,10 @@ const BurgerConstructorItem = ({text, thumbnail, price, id, index}) => {
     const [{ isDragging }, drag] = useDrag({
         type: 'stuffingSort',
         item: () => {
-            return { id, index }
+          return { id, index }
         },
         collect: (monitor) => ({
-            isDragging: monitor.isDragging(),
+          isDragging: monitor.isDragging(),
         }),
     })
 
@@ -98,13 +111,5 @@ const BurgerConstructorItem = ({text, thumbnail, price, id, index}) => {
   </li>
   );
 };
-
-BurgerConstructorItem.propTypes = {
-    text: PropTypes.string.isRequired,
-    thumbnail: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    id: PropTypes.string.isRequired,
-    index: PropTypes.number.isRequired,
-}
 
 export default BurgerConstructorItem;

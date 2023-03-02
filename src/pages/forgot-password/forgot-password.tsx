@@ -1,14 +1,18 @@
 import EntranceNavigation from '../../components/entrance-navigation/entrance-navigation';
 import Entrance from '../../components/entrance/entrance';
-import { useInput } from './../../hooks/useInput';
+import { useInput } from '../../hooks/useInput';
 import {EmailInput} from "@ya.praktikum/react-developer-burger-ui-components";
 import { useNavigate, Navigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { sendCode } from '../../utils/asyncFunctions';
 
+type TResponse = {
+  payload: { success: boolean; };
+}
+
 const ForgotPassword = () => {
 
-  const {user} = useSelector(store => store.user);
+  const {user} = useSelector((store: any) => store.user);
 
   const email = useInput('');
   const navigate = useNavigate();
@@ -17,11 +21,10 @@ const ForgotPassword = () => {
 
   const body = {"email" : email.value}
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('cle')
     dispatch(sendCode(body))
-      .then(res => {
+      .then((res: TResponse) => {
         console.log(res)
         if(res.payload.success) {
           navigate('/reset-password', {state: { from: location }})

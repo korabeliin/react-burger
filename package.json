@@ -49,6 +49,7 @@
     ]
   },
   "devDependencies": {
+    "@types/uuid": "^9.0.1",
     "prop-types": "^15.8.1"
   }
 }
